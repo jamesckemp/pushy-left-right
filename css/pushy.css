@@ -64,24 +64,16 @@
 
 /* Menu Transitions */
 
-.pushy, .site-container, .header-widget-area, .header-image .title-area {
+.pushy {
     -webkit-transition: all 0.2s cubic-bezier(.16,.68,.43,.99);
     -moz-transition: all 0.2s cubic-bezier(.16,.68,.43,.99);
     -o-transition: all 0.2s cubic-bezier(.16,.68,.43,.99);
     transition: all 0.2s cubic-bezier(.16,.68,.43,.99);
 }
 
-.pushy, .site-container, .flicker-free {
+.pushy {
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
-}
-
-.header-widget-area {
-    -webkit-backface-visibility: hidden;
-}
-
-.single-format-video .site-container {
-    -webkit-perspective: 0;
 }
 
 .pushy-active {
@@ -98,9 +90,9 @@
     display: block;
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     bottom: 0;
-    left: 200px;
+    right: 200px;
     z-index: 9999;
 }
 

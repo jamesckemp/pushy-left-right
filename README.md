@@ -38,7 +38,7 @@ Feel free to [let me know](http://www.twitter.com/cmyee) if you use Pushy in one
 
 ```html
 <!-- Pushy Menu -->
-<nav class="pushy pushy-left">
+<nav class="pushy pushy-right">
     <ul>
         <li><a href="#">Item 1</a></li>
         <li><a href="#">Item 2</a></li>
@@ -85,7 +85,7 @@ html, body{
 }
 ```
 
-- If you change the width of the ```.pushy``` menu, be sure to update the values in the ```.pushy-left```and ```.container-push, .push-push``` CSS classes.
+- If you change the width of the ```.pushy``` menu, be sure to update the values in the ```.pushy-right```and ```.container-push, .push-push``` CSS classes.
 
 ```css
 
@@ -93,7 +93,7 @@ html, body{
     width: 400px; /* Changed the width to 400px */
 }
 
-.pushy-left{
+.pushy-right{
     transform: translate3d(-400px,0,0); /* Updated the values */
     /* Don't forget the vendor prefixes */
 }
