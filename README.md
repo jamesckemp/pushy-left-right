@@ -1,16 +1,12 @@
-#Pushy -right
-
-This is a modified version to pull the menu out from the right - let me know if you have any problems.
-
-----------
-See the below for normal pushy
-----------
-
 #Pushy
+## Fork - This version supports both pushy left and pushy right.
+### Note - It's very rough around the edges, I will come back to it and clear it up, or you can send over a pull request.
 
-Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
+---
 
-Feel free to [let me know](http://www.twitter.com/cmyee) if you use Pushy in one of your websites.
+Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions. This project was inspired by the off-canvas navigation menu seen on [Medium](https://medium.com/).
+
+Pushy has been implemented on many sites, [check them out!](https://github.com/christophery/pushy#sites-using-pushy) Feel free to [let me know](http://www.twitter.com/cmyee) if you use Pushy in one of your websites.
 
 [View Demo](http://www.christopheryee.ca/pushy) | [WordPress Theme](https://github.com/christophery/pushypress)
 
@@ -25,20 +21,19 @@ Feel free to [let me know](http://www.twitter.com/cmyee) if you use Pushy in one
 
 ##Requirements
 
-- jQuery 1.9+
-- Modernizr (testing for CSS 3D Transforms)
+- [jQuery 1.9+](http://jquery.com/)
 
-##Usage
+##Install
 
-1. Include jQuery & Modernizr.
+Download the [packaged source file](https://github.com/christophery/pushy/archive/master.zip), this includes everything you need to get Pushy running on your site.
 
-2. Add the stylesheet (pushy.css) in your head and the JS (pushy.min.js) file in your footer.
+1. Add the stylesheet (pushy.css) in your head and the JS (pushy.min.js) file in your footer.
 
-3. Insert the following markup into your body.
+2. Insert the following markup into your body.
 
 ```html
 <!-- Pushy Menu -->
-<nav class="pushy pushy-right">
+<nav class="pushy pushy-left">
     <ul>
         <li><a href="#">Item 1</a></li>
         <li><a href="#">Item 2</a></li>
@@ -55,10 +50,13 @@ Feel free to [let me know](http://www.twitter.com/cmyee) if you use Pushy in one
 </div>
 ```
 
-##Modernizr
+##Bower
 
-Pushy uses Modernizr to detect & test for ```CSS 3D Transforms``` support in the browser. Be sure to include this test in you are using the [Modernizr build tool](http://modernizr.com/download/#-csstransforms3d-shiv-cssclasses-teststyles-testprop-testallprops-prefixes-domprefixes-load).
+If your are comfortable with command line, you can install Pushy as a [Bower](http://bower.io/) package:
 
+```
+bower install pushy
+```
 
 ##Tips
 
@@ -74,18 +72,7 @@ Pushy uses Modernizr to detect & test for ```CSS 3D Transforms``` support in the
 <div id="container"></div>
 ```
 
-- Add the following to hide horizontal scroll bars when menu is open, disable the webkit tap highlight and fix the focus scrolling in Safari.
-
-
-```css
-html, body{
-	overflow-x: hidden; /* prevents horizontal scroll bars */
-	-webkit-tap-highlight-color: rgba(0,0,0,0); /* disable webkit tap highlight */
-	height: 100%; /* fixes focus scrolling in Safari (OS X) */
-}
-```
-
-- If you change the width of the ```.pushy``` menu, be sure to update the values in the ```.pushy-right```and ```.container-push, .push-push``` CSS classes.
+- If you change the width of the ```.pushy``` menu, be sure to update the values in the ```.pushy-left```and ```.container-push, .push-push``` CSS classes.
 
 ```css
 
@@ -93,7 +80,7 @@ html, body{
     width: 400px; /* Changed the width to 400px */
 }
 
-.pushy-right{
+.pushy-left{
     transform: translate3d(-400px,0,0); /* Updated the values */
     /* Don't forget the vendor prefixes */
 }
@@ -104,16 +91,32 @@ html, body{
 }
 ```
 
+- If you want to prevent scrolling of your site when Pushy is open just add overflow-x: hidden and height: 100% to both the html & body tags.
+
+```css
+html, body{
+    overflow-x: hidden;
+    height: 100%;
+}
+```
+
 ##Browser Compatibility
 
 | Desktop       | Mobile                                     |
 | ------------- | -------------------------------------------|
-| IE 7-10       | Chrome (Android 4.2.2)                     |
-| Chrome        | Android Browser (Android 4.2.2)            |
-| Firefox       | Safari (iOS 6-7)                           |
+| IE 9-11       | Chrome (Android 4.x+)                      |
+| Chrome        | Android Browser (Android 4.x+)             |
+| Firefox       | Safari (iOS 7)                             |
 | Safari (Mac)  | Internet Explorer Mobile (Windows Phone 8) |
 
 ##Version History
+
+0.9.2
+
+- Removed modernizr dependency.
+- Updated site overlay with color + smoother transition.
+- Cleaned up the CSS a bit.
+- Dropped support for IE 7 & 8.
 
 0.9.1
 
@@ -139,10 +142,27 @@ html, body{
 - Updated the demo file
 - Updated the read me
 
+##Sites using Pushy
+
+Pushy has been implemented on many sites in the wild, check them out:
+
+- [Nordic Kaluste](http://www.nordickaluste.fi/) by [Joonas Sippola](http://www.joonassippola.fi/)
+- [Bentleys Estate and Lettings Agents](http://www.bentleysestateagents.co.uk/) by [@WolfHook](https://twitter.com/WolfHook)
+- [Alpha](http://christopheryee.ca/ghost/alpha/) by [Christopher Yee](https://creativemarket.com/cmyee/100484-Alpha)
+- [Firefox OS Devices](https://firefoxosdevices.org/) by [@s_hentzschel](https://twitter.com/s_hentzschel)
+- [Peter Tóth](http://www.petertoth.me/) by [@yednorozec](https://twitter.com/yednorozec)
+- [FulcrumTech](http://www.fulcrumtech.net/) by [@maxlapides](https://twitter.com/maxlapides)
+- [Organized Interiors](http://www.organizedinteriors.com/) by [@bombippy](https://twitter.com/bombippy)
+- [Developer Essentials](http://devessentials.net/) by [@dev_essentials](https://twitter.com/dev_essentials)
+- [The Black and Blue](http://www.theblackandblue.com/) by [@evanluzi](https://github.com/evanluzi)
+- [Echo](http://christopheryee.ca/ghost/echo/) by [Christopher Yee](https://creativemarket.com/cmyee/24881-Echo)
+- [Mochi](http://christopheryee.ca/ghost/mochi/) by [Christopher Yee](http://themeforest.net/item/mochi-responsive-theme-for-ghost/6674078)
+
+**Note:** You may have to resize your browser on some sites to see Pushy in action.
+
+To add your site, tweet to me [@cmyee](https://twitter.com/cmyee).
+
 ##Thanks to
 
 - [HTML5 Boilerplate](http://html5boilerplate.com/)
 - [jQuery](http://jquery.com/)
-- [Modernizr](http://modernizr.com/)
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/christophery/pushy/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
