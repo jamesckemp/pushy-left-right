@@ -1,7 +1,7 @@
 {
-  "name": "pushy-right",
+  "name": "pushy-left-right",
   "version": "0.9.1",
-  "homepage": "https://github.com/CHEWX/pushy",
+  "homepage": "https://github.com/CHEWX/pushy-left-right",
   "authors": [
     "christophery <@cmyee>",
     "Tom Hopcraft <@chewx>"
@@ -20,7 +20,8 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "Gruntfile.js",
+    "css/demo.css",
+    "css/normalize.css"
   ]
 }
