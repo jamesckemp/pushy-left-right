@@ -1,13 +1,15 @@
 {
   "name": "pushy-left-right",
-  "version": "0.9.1",
   "homepage": "https://github.com/CHEWX/pushy-left-right",
   "authors": [
     "christophery <@cmyee>",
     "Tom Hopcraft <@chewx>"
   ],
   "description": "Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.",
-  "main": ["js/pushy.js", "css/pushy.css"],
+  "main": [
+    "js/pushy.js",
+    "css/pushy.css"
+  ],
   "keywords": [
     "jquery",
     "offcanvas",
@@ -15,7 +17,6 @@
     "responsive"
   ],
   "license": "MIT",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
