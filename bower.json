@@ -22,6 +22,9 @@
     "bower_components",
     "Gruntfile.js",
     "css/demo.css",
-    "css/normalize.css"
+    "css/normalize.css",
+    ".htaccess",
+    ".gitattributes",
+    ".gitignore"
   ]
 }
