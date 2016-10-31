@@ -92,6 +92,7 @@ bower install pushy-jamesckemp --save
 - Allow multiple buttons.
 - Fallback overlaps instead of pushes to save performance.
 - Cleaned up JS. now caches elements for performance.
+- Stripped out pushy submenu so as not to force a specific type of content
 
 0.9.2
 
