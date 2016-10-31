@@ -54,7 +54,7 @@ Pushy has been implemented on many sites, [check them out!](https://github.com/c
 
 ##Bower
 
-If your are comfortable with command line, you can install Pushy as a [Bower](http://bower.io/) package:
+If you are comfortable with command line, you can install Pushy as a [Bower](http://bower.io/) package:
 
 ```
 bower install pushy-jamesckemp --save
