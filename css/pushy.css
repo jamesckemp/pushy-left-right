@@ -15,12 +15,12 @@
 	background: #ffffff;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
-	visibility: hidden;
+	opacity: 0;
 }
 
 .pushy-left,
 .pushy-right {
-    visibility: visible;
+    opacity: 1;
 }
 
 .pushy-left {
@@ -69,7 +69,8 @@
 .pushy-container,
 [data-pushy] {
 	transition:
-	    transform .2s cubic-bezier(0.16,0.68,0.43,0.99);
+	    transform .2s cubic-bezier(0.16,0.68,0.43,0.99),
+	    opacity .2s linear .2s;
 }
 
 /* Body */
