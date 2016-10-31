@@ -1,190 +1,237 @@
-/*! Pushy - v0.9.2 - 2014-9-13
-* Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
-* https://github.com/christophery/pushy/
-* by Christopher Yee */
+/*! Pushy - v0.10.0 - 2016-31-10
+ * Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
+ * https://github.com/jamesckemp/pushy-left-right/
+ * by Christopher Yee
+ * modified by James Kemp */
 
-$(function() {
-	var pushyLeft = $('.pushy-left'), //menu css class
-		pushyRight = $('.pushy-right'), //menu css class
+(function($, document) {
 
-		body = $('body'),
+    var pushy = {
 
-		containerLeft = $('#container'), //container css class
-		containerRight = $('#container'), //container css class
+        /**
+         * Cache
+         *
+         * Caches common objects and vars
+         */
+        cache: function() {
 
-		pushLeft = $('.push'), //css class to add pushy capability
-		pushRight = $('.push'), //css class to add pushy capability
+            pushy.els = {};
+            pushy.vars = {};
+            pushy.fallback = {};
 
-		siteOverlayLeft = $('.site-overlay--left'), //site overlay
-		siteOverlayRight = $('.site-overlay--right'), //site overlay
+            // common elements
+            pushy.els.body = $('body');
+            pushy.els.items = $('[data-pushy]');
+            pushy.els.triggers = $('[data-pushy-trigger]');
+            pushy.els.overlay = $('.site-overlay');
 
-		pushyLeftClass = "pushy-left pushy-left--open", //menu position & menu open class
-		pushyRightClass = "pushy-right pushy-right--open", //menu position & menu open class
+            // common vars
+            pushy.vars.css_transforms_3d = pushy.css_transforms_3d();
+            pushy.vars.classes = {
+                active_item: 'pushy-active-item',
+                left: {
+                    item: 'pushy-left--open',
+                    active: 'pushy-active pushy-left-active'
+                },
+                right: {
+                    item: 'pushy-right--open',
+                    active: 'pushy-active pushy-right-active'
+                },
+            };
 
-		pushyLeftActiveClass = "pushy-left--active", //css class to toggle site overlay
-		pushyRightActiveClass = "pushy-right--active", //css class to toggle site overlay
+            // fallback vars
+            pushy.fallback.item_showing = false;
+            pushy.fallback.speed = 200;
 
-		containerLeftClass = "container-push--left", //container open class
-		containerRightClass = "container-push--right", //container open class
+        },
 
-		pushClass = "push-push", //css class to add pushy capability
+        /**
+         * Document Ready
+         */
+        on_ready: function() {
 
-		menuBtnLeft = $('.menu-btn--left, .pushy-left a'), //css classes to toggle the menu
-		menuBtnRight = $('.menu-btn--right, .pushy-right a'), //css classes to toggle the menu
+            pushy.cache();
+            pushy.setup_pushy();
 
-		menuSpeed = 200, //jQuery fallback menu speed
-		menuWidth = pushyLeft.width() + "px"; //jQuery fallback menu width
+        },
 
-	// Pushy Left
+        /**
+         * Setup Pushy
+         */
+        setup_pushy: function() {
 
-	function togglePushyLeft(){
-		body.toggleClass(pushyLeftActiveClass); //toggle site overlay
-		pushyLeft.toggleClass(pushyLeftClass);
-		containerLeft.toggleClass(containerLeftClass);
-		pushLeft.toggleClass(pushClass); //css class to add pushy capability
-	}
+            pushy.setup_items();
+            pushy.setup_triggers();
+            pushy.setup_overlay();
 
-	function openPushyLeftFallback(){
-		body.addClass(pushyLeftActiveClass);
-		pushyLeft.animate({left: "0px"}, menuSpeed);
-		containerLeft.animate({left: menuWidth}, menuSpeed);
-		pushLeft.animate({left: menuWidth}, menuSpeed); //css class to add pushy capability
-	}
+        },
 
-	function closePushyLeftFallback(){
-		body.removeClass(pushyLeftActiveClass);
-		pushyLeft.animate({left: "-" + menuWidth}, menuSpeed);
-		containerLeft.animate({left: "0px"}, menuSpeed, function() {
-			$(this).removeAttr('style');
-		});
-		pushLeft.animate({left: "0px"}, menuSpeed); //css class to add pushy capability
-	}
+        /**
+         * Setup Pushy Items
+         */
+        setup_items: function() {
 
-	// Pushy Right
+            if( pushy.els.items.length <= 0 ) { return; }
 
-	function togglePushyRight(){
-		body.toggleClass(pushyRightActiveClass); //toggle site overlay
-		pushyRight.toggleClass(pushyRightClass);
-		containerRight.toggleClass(containerRightClass);
-		pushRight.toggleClass(pushClass); //css class to add pushy capability
-	}
+            pushy.els.items.each(function( index, item ){
 
-	function openPushyRightFallback(){
-		body.addClass(pushyRightActiveClass);
-		pushyRight.animate({right: "0px"}, menuSpeed);
-		containerRight.animate({right: menuWidth, left: "auto"}, menuSpeed);
-		pushRight.animate({right: menuWidth}, menuSpeed); //css class to add pushy capability
-	}
+                var $item = $( item ),
+                    item_data = $item.data('pushy'),
+                    item_width = $item.width();
 
-	function closePushyRightFallback(){
-		body.removeClass(pushyRightActiveClass);
-		pushyRight.animate({right: "-" + menuWidth}, menuSpeed);
-		containerRight.animate({right: "0px"}, menuSpeed, function() {
-			$(this).removeAttr('style');
-		});
-		pushRight.animate({right: "0px"}, menuSpeed); //css class to add pushy capability
-	}
+                $item.addClass('pushy-'+item_data.direction);
 
-	//checks if 3d transforms are supported removing the modernizr dependency
-	cssTransforms3d = (function csstransforms3d(){
-		var el = document.createElement('p'),
-		supported = false,
-		transforms = {
-		    'webkitTransform':'-webkit-transform',
-		    'OTransform':'-o-transform',
-		    'msTransform':'-ms-transform',
-		    'MozTransform':'-moz-transform',
-		    'transform':'transform'
-		};
+                $item.data('pushy-direction', item_data.direction);
+                $item.data('pushy-width', item_width);
 
-		// Add it to the body to get the computed style
-		document.body.insertBefore(el, null);
+                // Fallback
 
-		for(var t in transforms){
-		    if( el.style[t] !== undefined ){
-		        el.style[t] = 'translate3d(1px,1px,1px)';
-		        supported = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-		    }
-		}
+                if( !pushy.vars.css_transforms_3d ) {
 
-		document.body.removeChild(el);
+                    var args = {};
+                    args[item_data.direction] = -item_width+'px';
 
-		return (supported !== undefined && supported.length > 0 && supported !== "none");
-	})();
+                    $item.css( args );
 
-	if(cssTransforms3d){
-		//toggle left menu
-		menuBtnLeft.click(function() {
-			togglePushyLeft();
-		});
-		//toggle right menu
-		menuBtnRight.click(function() {
-			togglePushyRight();
-		});
+                }
 
-		//close left menu when clicking site overlay
-		siteOverlayLeft.click(function(){
-			togglePushyLeft();
-		});
+            });
 
-		//close right menu when clicking site overlay
-		siteOverlayRight.click(function(){
-			togglePushyRight();
-		});
-	}else{
-		//jQuery fallback
-		pushyLeft.css({left: "-" + menuWidth}); //hide menu by default
-		containerLeft.css({"overflow-x": "hidden"}); //fixes IE scrollbar issue
+        },
 
-		//jQuery fallback
-		pushyRight.css({right: "-" + menuWidth}); //hide menu by default
-		containerRight.css({"overflow-x": "hidden"}); //fixes IE scrollbar issue
+        /**
+         * Setup Pushy Trigger
+         */
+        setup_triggers: function() {
 
-		//keep track of menu state (open/close)
-		var state = true;
+            if( pushy.els.triggers.length <= 0 ) { return; }
 
-		//toggle left menu
-		menuBtnLeft.click(function() {
-			if (state) {
-				openPushyLeftFallback();
-				state = false;
-			} else {
-				closePushyLeftFallback();
-				state = true;
-			}
-		});
+            pushy.els.triggers.each(function( index, trigger ){
 
-		//toggle right menu
-		menuBtnRight.click(function() {
-			if (state) {
-				openPushyRightFallback();
-				state = false;
-			} else {
-				closePushyRightFallback();
-				state = true;
-			}
-		});
+                var $trigger = $( trigger ),
+                    item_id = $trigger.data('pushy-trigger'),
+                    $item = $('#'+item_id);
 
-		//close left menu when clicking site overlay
-		siteOverlayLeft.click(function(){
-			if (state) {
-				openPushyLeftFallback();
-				state = false;
-			} else {
-				closePushyLeftFallback();
-				state = true;
-			}
-		});
+                if( $item.length <= 0 ) { return; }
 
-		//close right menu when clicking site overlay
-		siteOverlayRight.click(function(){
-			if (state) {
-				openPushyRightFallback();
-				state = false;
-			} else {
-				closePushyRightFallback();
-				state = true;
-			}
-		});
-	}
-});
+                $trigger.data('pushy-item', $('#'+item_id));
+
+                // toggle pushy on click
+                $trigger.on('click', function() {
+
+                    pushy.toggle( $item, $trigger );
+
+                    return false;
+
+                });
+
+            });
+
+        },
+
+        /**
+         * Setup Pushy Overlay
+         */
+        setup_overlay: function() {
+
+            pushy.els.overlay.on('click', function(){
+
+                var $overlay = $(this),
+                    $item = $('.'+pushy.vars.classes.active_item);
+
+                pushy.toggle_item( $item );
+
+            });
+
+        },
+
+        /**
+         * Toggle Pushy
+         *
+         * @param obj $item
+         * @param obj $trigger
+         */
+        toggle: function( $item, $trigger ) {
+
+            pushy.toggle_item( $item );
+
+        },
+
+        /**
+         * Toggle Item
+         *
+         * @param obj $item
+         */
+        toggle_item: function( $item ) {
+
+            pushy.els.body.toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].active );
+            $item
+                .toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].item )
+                .toggleClass( pushy.vars.classes.active_item );
+
+            // Fallback
+
+            if( !pushy.vars.css_transforms_3d ) {
+
+                var item_args = {};
+
+                if( pushy.fallback.item_showing ) {
+
+                    item_args[ $item.data('pushy-direction') ] = -$item.data('pushy-width')+'px';
+
+                    pushy.fallback.item_showing = false;
+
+                } else {
+
+                    item_args[ $item.data('pushy-direction') ] = '0px';
+
+                    pushy.fallback.item_showing = true;
+
+                }
+
+                $item.animate( item_args, pushy.fallback.speed );
+
+            }
+
+        },
+
+        /**
+         * Helper: CSS Transforms 3D
+         *
+         * checks if 3d transforms are supported removing the modernizr dependency
+         */
+        css_transforms_3d: function() {
+
+            // return false;
+
+            var el = document.createElement('p'),
+            supported = false,
+            transforms = {
+                'webkitTransform':'-webkit-transform',
+                'OTransform':'-o-transform',
+                'msTransform':'-ms-transform',
+                'MozTransform':'-moz-transform',
+                'transform':'transform'
+            };
+
+            // Add it to the body to get the computed style
+            document.body.insertBefore(el, null);
+
+            for(var t in transforms){
+                if( el.style[t] !== undefined ){
+                    el.style[t] = 'translate3d(1px,1px,1px)';
+                    supported = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+                }
+            }
+
+            document.body.removeChild(el);
+
+            return (supported !== undefined && supported.length > 0 && supported !== "none");
+
+        }
+
+    }
+
+	$(document).ready( pushy.on_ready );
+
+}(jQuery, document));

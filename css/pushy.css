@@ -1,151 +1,118 @@
-/*! Pushy - v0.9.2 - 2014-9-13
-* Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
-* https://github.com/christophery/pushy/
-* by Christopher Yee */
-
-html, body {
-    overflow-x: hidden; /* prevents horizontal scroll bars */
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* disable webkit tap highlight */
-    height: 100%; /* fixes focus scrolling in Safari (OS X) */
-}
+/*! Pushy - v0.10.0 - 2016-31-10
+ * Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
+ * https: //github.com/jamesckemp/pushy-left-right/
+ * by Christopher Yee
+ * modified by James Kemp */
 
 /* Menu Appearance */
 
-.pushy{
-    position: fixed;
-    width: 200px;
-    height: 100%;
-    top: 0;
-    z-index: 9999;
-    background: #333332;
-    font-size: 0.9em;
-    font-weight: bold;
-    -webkit-box-shadow: inset -10px 0 6px -9px rgba(0, 0, 0, .7);
-    -moz-box-shadow: inset -10px 0 6px -9px rgba(0, 0, 0, .7);
-    box-shadow: inset -10px 0 6px -9px rgba(0, 0, 0, .7);
-    overflow: auto;
-    -webkit-overflow-scrolling: touch; /* enables momentum scrolling in iOS overflow elements */
+[data-pushy] {
+	position: fixed;
+	width: 200px;
+	height: 100%;
+	top: 0;
+	z-index: 9999;
+	background: #ffffff;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	visibility: hidden;
+}
+
+.pushy-left,
+.pushy-right {
+    visibility: visible;
+}
+
+.pushy-left {
+	left: 0;
 }
 
 .pushy-right {
-    right: 0;
+	right: 0;
 }
 
-.pushy a{
-    display: block;
-    color: #b3b3b1;
-    padding: 15px 30px;
-    border-bottom: 1px solid rgba(0, 0, 0, .1);
-    border-top: 1px solid rgba(255, 255, 255, .1);
-    text-decoration: none;
+/* Menu Movement */
+
+.pushy-left {
+	-webkit-transform: translate3d(-200px,0,0);
+	-ms-transform: translate3d(-200px,0,0);
+	transform: translate3d(-200px,0,0);
 }
 
-.pushy a:hover{
-    background: #00b4ff;
-    color: #FFF;
+.pushy-left-active .pushy-container {
+	-webkit-transform: translate3d(200px,0,0);
+	-ms-transform: translate3d(200px,0,0);
+	transform: translate3d(200px,0,0);
 }
 
-/* Menu Movement Left */
-
-.pushy-left{
-    -webkit-transform: translate3d(-200px,0,0);
-    -moz-transform: translate3d(-200px,0,0);
-    -ms-transform: translate3d(-200px,0,0);
-    -o-transform: translate3d(-200px,0,0);
-    transform: translate3d(-200px,0,0);
+.pushy-right {
+	-webkit-transform: translate3d(200px,0,0);
+	-ms-transform: translate3d(200px,0,0);
+	transform: translate3d(200px,0,0);
 }
 
-.pushy-left--open{
-    left: 0;
-    -webkit-transform: translate3d(0,0,0);
-    -moz-transform: translate3d(0,0,0);
-    -ms-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
+.pushy-right-active .pushy-container {
+	-webkit-transform: translate3d(-200px,0,0);
+	-ms-transform: translate3d(-200px,0,0);
+	transform: translate3d(-200px,0,0);
 }
 
-.container-push--left, .push-push{
-    -webkit-transform: translate3d(200px,0,0);
-    -moz-transform: translate3d(200px,0,0);
-    -ms-transform: translate3d(200px,0,0);
-    -o-transform: translate3d(200px,0,0);
-    transform: translate3d(200px,0,0);
-}
-
-/* Menu Movement Right */
-
-.pushy-right{
-    -webkit-transform: translate3d(200px,0,0);
-    -moz-transform: translate3d(200px,0,0);
-    -ms-transform: translate3d(200px,0,0);
-    -o-transform: translate3d(200px,0,0);
-    transform: translate3d(200px,0,0);
-}
-
-.pushy-right--open{
-    right: 0;
-    -webkit-transform: translate3d(0,0,0);
-    -moz-transform: translate3d(0,0,0);
-    -ms-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-}
-
-.container-push--right, .push-push{
-    -webkit-transform: translate3d(-200px,0,0);
-    -moz-transform: translate3d(-200px,0,0);
-    -ms-transform: translate3d(-200px,0,0);
-    -o-transform: translate3d(-200px,0,0);
-    transform: translate3d(-200px,0,0);
+.pushy-left-active .pushy-left,
+.pushy-right-active .pushy-right {
+	-webkit-transform: translate3d(0,0,0);
+	-ms-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
 }
 
 /* Menu Transitions */
 
-.pushy, #container, .push{
-    -webkit-transition: -webkit-transform .2s cubic-bezier(.16, .68, .43, .99);
-    -moz-transition: -moz-transform .2s cubic-bezier(.16, .68, .43, .99);
-    -o-transition: -o-transform .2s cubic-bezier(.16, .68, .43, .99);
-    transition: transform .2s cubic-bezier(.16, .68, .43, .99);
+.pushy-container,
+[data-pushy] {
+	transition:
+	    transform .2s cubic-bezier(0.16,0.68,0.43,0.99);
+}
+
+/* Body */
+
+.pushy-active {
+    overflow-x: hidden;
 }
 
 /* Site Overlay */
 
-.site-overlay{
-    display: none;
+.site-overlay {
+	display: none;
 }
 
-.pushy-left--active .site-overlay--left,
-.pushy-right--active .site-overlay--right {
-    display: block;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 9998;
-    background-color: rgba(0,0,0,0.5);
-    -webkit-animation: fade 500ms;
-    -moz-animation: fade 500ms;
-    -o-animation: fade 500ms;
-    animation: fade 500ms;
+.pushy-active .site-overlay {
+	display: block;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 9998;
+	background-color: rgba(0,0,0,0.5);
+	-webkit-animation: fade 500ms;
+	animation: fade 500ms;
 }
 
-@keyframes fade{
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
 
-@-moz-keyframes fade{
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-}
+@-webkit-keyframes fade {
+	0% {
+		opacity: 0;
+	}
 
-@-webkit-keyframes fade{
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-@-o-keyframes fade{
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
+	100% {
+		opacity: 1;
+	}
 }

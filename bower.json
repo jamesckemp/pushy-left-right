@@ -1,9 +1,9 @@
 {
-  "name": "pushy-left-right",
+  "name": "pushy-jamesckemp",
   "homepage": "https://github.com/CHEWX/pushy-left-right",
   "authors": [
     "christophery <@cmyee>",
-    "Tom Hopcraft <@chewx>"
+    "James Kemp <@jamesckemp>"
   ],
   "description": "Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.",
   "main": [

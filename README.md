@@ -25,15 +25,13 @@ Pushy has been implemented on many sites, [check them out!](https://github.com/c
 
 ##Install
 
-Download the [packaged source file](https://github.com/christophery/pushy/archive/master.zip), this includes everything you need to get Pushy running on your site.
-
 1. Add the stylesheet (pushy.css) in your head and the JS (pushy.min.js) file in your footer.
 
 2. Insert the following markup into your body.
 
 ```html
 <!-- Pushy Menu -->
-<nav class="pushy pushy-left">
+<nav id="menu" data-pushy='{"direction": "left"}'>
     <ul>
         <li><a href="#">Item 1</a></li>
         <li><a href="#">Item 2</a></li>
@@ -41,75 +39,60 @@ Download the [packaged source file](https://github.com/christophery/pushy/archiv
 </nav>
 
 <!-- Site Overlay -->
-<div class="site-overlay"></div>
+<div class="pushy-overlay"></div>
 
 <!-- Your Content -->
-<div id="container">
+<div class="pushy-container">
     <!-- Menu Button -->
-    <div class="menu-btn">&#9776; Menu</div>
+    <div data-pushy-trigger="menu">&#9776; Menu</div>
 </div>
 ```
+
+* `data-pushy` is placed on the element you want to set off-canvas. It currently accepts one parameter in JSOn format of `direction` which can be "left" or "right".
+* `.pushy-overlay` is added to an element on the same level as your off-canvas content
+* `.pushy-container` is added to any element that you want to be pushed when the off-canvas content is activated
+* `data-pushy-trigger` indicates the ID of the off-canvas element you'd like trigger. You can have multiple buttons triggering the same off-canvas content.
 
 ##Bower
 
 If your are comfortable with command line, you can install Pushy as a [Bower](http://bower.io/) package:
 
 ```
-bower install pushy
+bower install pushy-jamesckemp --save
 ```
 
 ##Tips
 
-- Use the ```.push``` CSS class on HTML elements outside of the ```#container```.
+- Use the ```.pushy-container``` CSS class on any HTML elements you want to push.
 
 ```html
-<header class="push">
+<header class="pushy-container">
     <h1>This is a Heading</h1>
     <h2>This is a subheading</h2>
 </header>
 
 <!-- Your Content -->
-<div id="container"></div>
-```
-
-- If you change the width of the ```.pushy``` menu, be sure to update the values in the ```.pushy-left```and ```.container-push, .push-push``` CSS classes.
-
-```css
-
-.pushy{
-    width: 400px; /* Changed the width to 400px */
-}
-
-.pushy-left{
-    transform: translate3d(-400px,0,0); /* Updated the values */
-    /* Don't forget the vendor prefixes */
-}
-
-.container-push, .push-push{
-    transform: translate3d(400px,0,0); /* Updated the values */
-    /* Don't forget the vendor prefixes */
-}
-```
-
-- If you want to prevent scrolling of your site when Pushy is open just add overflow-x: hidden and height: 100% to both the html & body tags.
-
-```css
-html, body{
-    overflow-x: hidden;
-    height: 100%;
-}
+<div class="pushy-container"></div>
 ```
 
 ##Browser Compatibility
 
-| Desktop       | Mobile                                     |
-| ------------- | -------------------------------------------|
-| IE 9-11       | Chrome (Android 4.x+)                      |
-| Chrome        | Android Browser (Android 4.x+)             |
-| Firefox       | Safari (iOS 7)                             |
-| Safari (Mac)  | Internet Explorer Mobile (Windows Phone 8) |
+| Desktop       | Mobile                                      |
+| ------------- | ------------------------------------------- |
+| IE 9-11       | Chrome (Android 4.x+)                       |
+| Chrome        | Android Browser (Android 4.x+)              |
+| Firefox       | Safari (iOS 7)                              |
+| Safari (Mac)  | Internet Explorer Mobile (Windows Phone 8)  |
 
 ##Version History
+
+0.10.0
+
+- Allow left/right on the same site.
+- Data params to configure direction of pushy items.
+- Allow multiple buttons.
+- Fallback overlaps instead of pushes to save performance.
+- Cleaned up JS. now caches elements for performance.
 
 0.9.2
 
