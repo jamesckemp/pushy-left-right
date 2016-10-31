@@ -1,6 +1,6 @@
 {
   "name": "pushy-jamesckemp",
-  "homepage": "https://github.com/CHEWX/pushy-left-right",
+  "homepage": "https://github.com/jamesckemp/pushy-left-right",
   "authors": [
     "christophery <@cmyee>",
     "James Kemp <@jamesckemp>"
@@ -27,5 +27,6 @@
     ".htaccess",
     ".gitattributes",
     ".gitignore"
-  ]
+  ],
+  "version": '1.1.0'
 }
