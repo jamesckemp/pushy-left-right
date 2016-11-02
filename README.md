@@ -85,7 +85,11 @@ bower install pushy-jamesckemp --save
 
 ##Version History
 
-0.10.0
+1.0.1
+
+- Add active classes to the html tag
+
+1.0.0
 
 - Allow left/right on the same site.
 - Data params to configure direction of pushy items.
