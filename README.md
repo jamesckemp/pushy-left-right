@@ -85,6 +85,10 @@ bower install pushy-jamesckemp --save
 
 ##Version History
 
+1.1.2
+
+- Do not cache pushy triggers
+
 1.1.1
 
 - Add active classes to the html tag

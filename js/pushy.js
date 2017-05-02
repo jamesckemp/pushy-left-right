@@ -1,4 +1,4 @@
-/*! Pushy - v1.1.1 - 2016-31-10
+/*! Pushy - v1.1.2 - 2017-05-02
  * Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
  * https://github.com/jamesckemp/pushy-left-right/
  * by Christopher Yee
@@ -23,7 +23,6 @@
             pushy.els.body = $('body');
             pushy.els.html = $('html');
             pushy.els.items = $('[data-pushy]');
-            pushy.els.triggers = $('[data-pushy-trigger]');
             pushy.els.overlay = $('.site-overlay');
 
             // common vars
@@ -105,28 +104,21 @@
          */
         setup_triggers: function() {
 
-            if( pushy.els.triggers.length <= 0 ) { return; }
+	        $( '[data-pushy-trigger]' ).on( 'click', function(){
 
-            pushy.els.triggers.each(function( index, trigger ){
+		        var $trigger = $( this ),
+                    item_id = $trigger.data( 'pushy-trigger' ),
+                    $item = $( '#'+item_id );
 
-                var $trigger = $( trigger ),
-                    item_id = $trigger.data('pushy-trigger'),
-                    $item = $('#'+item_id);
+                if( $item.length <= 0 ) { return false; }
 
-                if( $item.length <= 0 ) { return; }
+                $trigger.data( 'pushy-item', $( '#'+item_id ) );
 
-                $trigger.data('pushy-item', $('#'+item_id));
+                pushy.toggle( $item, $trigger );
 
-                // toggle pushy on click
-                $trigger.on('click', function() {
+                return false;
 
-                    pushy.toggle( $item, $trigger );
-
-                    return false;
-
-                });
-
-            });
+	        });
 
         },
 
