@@ -6,226 +6,226 @@
 
 (function($, document) {
 
-    var pushy = {
+	var pushy = {
 
-        /**
-         * Cache
-         *
-         * Caches common objects and vars
-         */
-        cache: function() {
+		/**
+		 * Cache
+		 *
+		 * Caches common objects and vars
+		 */
+		cache: function() {
 
-            pushy.els = {};
-            pushy.vars = {};
-            pushy.fallback = {};
+			pushy.els = {};
+			pushy.vars = {};
+			pushy.fallback = {};
 
-            // common elements
-            pushy.els.body = $('body');
-            pushy.els.html = $('html');
-            pushy.els.items = $('[data-pushy]');
-            pushy.els.overlay = $('.site-overlay');
+			// common elements
+			pushy.els.body = $('body');
+			pushy.els.html = $('html');
+			pushy.els.items = $('[data-pushy]');
+			pushy.els.overlay = $('.site-overlay');
 
-            // common vars
-            pushy.vars.css_transforms_3d = pushy.css_transforms_3d();
-            pushy.vars.classes = {
-                active_item: 'pushy-active-item',
-                left: {
-                    item: 'pushy-left--open',
-                    active: 'pushy-active pushy-left-active'
-                },
-                right: {
-                    item: 'pushy-right--open',
-                    active: 'pushy-active pushy-right-active'
-                },
-            };
+			// common vars
+			pushy.vars.css_transforms_3d = pushy.css_transforms_3d();
+			pushy.vars.classes = {
+				active_item: 'pushy-active-item',
+				left: {
+					item: 'pushy-left--open',
+					active: 'pushy-active pushy-left-active'
+				},
+				right: {
+					item: 'pushy-right--open',
+					active: 'pushy-active pushy-right-active'
+				},
+			};
 
-            // fallback vars
-            pushy.fallback.item_showing = false;
-            pushy.fallback.speed = 200;
+			// fallback vars
+			pushy.fallback.item_showing = false;
+			pushy.fallback.speed = 200;
 
-        },
+		},
 
-        /**
-         * Document Ready
-         */
-        on_ready: function() {
+		/**
+		 * Document Ready
+		 */
+		on_ready: function() {
 
-            pushy.cache();
-            pushy.setup_pushy();
+			pushy.cache();
+			pushy.setup_pushy();
 
-        },
+		},
 
-        /**
-         * Setup Pushy
-         */
-        setup_pushy: function() {
+		/**
+		 * Setup Pushy
+		 */
+		setup_pushy: function() {
 
-            pushy.setup_items();
-            pushy.setup_triggers();
-            pushy.setup_overlay();
+			pushy.setup_items();
+			pushy.setup_triggers();
+			pushy.setup_overlay();
 
-        },
+		},
 
-        /**
-         * Setup Pushy Items
-         */
-        setup_items: function() {
+		/**
+		 * Setup Pushy Items
+		 */
+		setup_items: function() {
 
-            if( pushy.els.items.length <= 0 ) { return; }
+			if( pushy.els.items.length <= 0 ) { return; }
 
-            pushy.els.items.each(function( index, item ){
+			pushy.els.items.each(function( index, item ){
 
-                var $item = $( item ),
-                    item_data = $item.data('pushy'),
-                    item_width = $item.width();
+				var $item = $( item ),
+					item_data = $item.data('pushy'),
+					item_width = $item.width();
 
-                $item.addClass('pushy-'+item_data.direction);
+				$item.addClass('pushy-'+item_data.direction);
 
-                $item.data('pushy-direction', item_data.direction);
-                $item.data('pushy-width', item_width);
+				$item.data('pushy-direction', item_data.direction);
+				$item.data('pushy-width', item_width);
 
-                // Fallback
+				// Fallback
 
-                if( !pushy.vars.css_transforms_3d ) {
+				if( !pushy.vars.css_transforms_3d ) {
 
-                    var args = {};
-                    args[item_data.direction] = -item_width+'px';
+					var args = {};
+					args[item_data.direction] = -item_width+'px';
 
-                    $item.css( args );
+					$item.css( args );
 
-                }
+				}
 
-            });
+			});
 
-        },
+		},
 
-        /**
-         * Setup Pushy Trigger
-         */
-        setup_triggers: function() {
+		/**
+		 * Setup Pushy Trigger
+		 */
+		setup_triggers: function() {
 
-	        $( '[data-pushy-trigger]' ).on( 'click', function(){
+			$( document ).on( 'click', '[data-pushy-trigger]', function() {
 
-		        var $trigger = $( this ),
-                    item_id = $trigger.data( 'pushy-trigger' ),
-                    $item = $( '#'+item_id );
+				var $trigger = $( this ),
+					item_id = $trigger.data( 'pushy-trigger' ),
+					$item = $( '#'+item_id );
 
-                if( $item.length <= 0 ) { return false; }
+				if( $item.length <= 0 ) { return false; }
 
-                $trigger.data( 'pushy-item', $( '#'+item_id ) );
+				$trigger.data( 'pushy-item', $( '#'+item_id ) );
 
-                pushy.toggle( $item, $trigger );
+				pushy.toggle( $item, $trigger );
 
-                return false;
+				return false;
 
-	        });
+			});
 
-        },
+		},
 
-        /**
-         * Setup Pushy Overlay
-         */
-        setup_overlay: function() {
+		/**
+		 * Setup Pushy Overlay
+		 */
+		setup_overlay: function() {
 
-            pushy.els.overlay.on('click', function(){
+			pushy.els.overlay.on('click', function(){
 
-                var $overlay = $(this),
-                    $item = $('.'+pushy.vars.classes.active_item);
+				var $overlay = $(this),
+					$item = $('.'+pushy.vars.classes.active_item);
 
-                pushy.toggle_item( $item );
+				pushy.toggle_item( $item );
 
-            });
+			});
 
-        },
+		},
 
-        /**
-         * Toggle Pushy
-         *
-         * @param obj $item
-         * @param obj $trigger
-         */
-        toggle: function( $item, $trigger ) {
+		/**
+		 * Toggle Pushy
+		 *
+		 * @param obj $item
+		 * @param obj $trigger
+		 */
+		toggle: function( $item, $trigger ) {
 
-            pushy.toggle_item( $item );
+			pushy.toggle_item( $item );
 
-        },
+		},
 
-        /**
-         * Toggle Item
-         *
-         * @param obj $item
-         */
-        toggle_item: function( $item ) {
+		/**
+		 * Toggle Item
+		 *
+		 * @param obj $item
+		 */
+		toggle_item: function( $item ) {
 
-            pushy.els.body.toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].active );
-            pushy.els.html.toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].active );
+			pushy.els.body.toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].active );
+			pushy.els.html.toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].active );
 
-            $item
-                .toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].item )
-                .toggleClass( pushy.vars.classes.active_item );
+			$item
+				.toggleClass( pushy.vars.classes[ $item.data('pushy-direction') ].item )
+				.toggleClass( pushy.vars.classes.active_item );
 
-            // Fallback
+			// Fallback
 
-            if( !pushy.vars.css_transforms_3d ) {
+			if( !pushy.vars.css_transforms_3d ) {
 
-                var item_args = {};
+				var item_args = {};
 
-                if( pushy.fallback.item_showing ) {
+				if( pushy.fallback.item_showing ) {
 
-                    item_args[ $item.data('pushy-direction') ] = -$item.data('pushy-width')+'px';
+					item_args[ $item.data('pushy-direction') ] = -$item.data('pushy-width')+'px';
 
-                    pushy.fallback.item_showing = false;
+					pushy.fallback.item_showing = false;
 
-                } else {
+				} else {
 
-                    item_args[ $item.data('pushy-direction') ] = '0px';
+					item_args[ $item.data('pushy-direction') ] = '0px';
 
-                    pushy.fallback.item_showing = true;
+					pushy.fallback.item_showing = true;
 
-                }
+				}
 
-                $item.animate( item_args, pushy.fallback.speed );
+				$item.animate( item_args, pushy.fallback.speed );
 
-            }
+			}
 
-        },
+		},
 
-        /**
-         * Helper: CSS Transforms 3D
-         *
-         * checks if 3d transforms are supported removing the modernizr dependency
-         */
-        css_transforms_3d: function() {
+		/**
+		 * Helper: CSS Transforms 3D
+		 *
+		 * checks if 3d transforms are supported removing the modernizr dependency
+		 */
+		css_transforms_3d: function() {
 
-            // return false;
+			// return false;
 
-            var el = document.createElement('p'),
-            supported = false,
-            transforms = {
-                'webkitTransform':'-webkit-transform',
-                'OTransform':'-o-transform',
-                'msTransform':'-ms-transform',
-                'MozTransform':'-moz-transform',
-                'transform':'transform'
-            };
+			var el = document.createElement('p'),
+			supported = false,
+			transforms = {
+				'webkitTransform':'-webkit-transform',
+				'OTransform':'-o-transform',
+				'msTransform':'-ms-transform',
+				'MozTransform':'-moz-transform',
+				'transform':'transform'
+			};
 
-            // Add it to the body to get the computed style
-            document.body.insertBefore(el, null);
+			// Add it to the body to get the computed style
+			document.body.insertBefore(el, null);
 
-            for(var t in transforms){
-                if( el.style[t] !== undefined ){
-                    el.style[t] = 'translate3d(1px,1px,1px)';
-                    supported = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-                }
-            }
+			for(var t in transforms){
+				if( el.style[t] !== undefined ){
+					el.style[t] = 'translate3d(1px,1px,1px)';
+					supported = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+				}
+			}
 
-            document.body.removeChild(el);
+			document.body.removeChild(el);
 
-            return (supported !== undefined && supported.length > 0 && supported !== "none");
+			return (supported !== undefined && supported.length > 0 && supported !== "none");
 
-        }
+		}
 
-    }
+	}
 
 	$(document).ready( pushy.on_ready );
 
